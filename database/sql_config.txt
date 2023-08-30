@@ -1,0 +1,8 @@
+-- Update media domain link
+UPDATE banks SET photo = REPLACE(photo, 'http://picoin.tech', 'http://domamin.com');
+UPDATE banners SET photo = REPLACE(photo, 'http://picoin.tech', 'http://domamin.com');
+UPDATE categories SET photo = REPLACE(photo, 'http://picoin.tech', 'http://domamin.com');
+UPDATE posts SET photo = REPLACE(photo, 'http://picoin.tech', 'http://domamin.com');
+UPDATE products SET photo = REPLACE(photo, 'http://picoin.tech', 'http://domamin.com');
+UPDATE settings SET photo = REPLACE(photo, 'http://picoin.tech', 'http://domamin.com');
+UPDATE settings SET logo = REPLACE(logo, 'http://picoin.tech', 'http://domamin.com');

@@ -1,0 +1,6 @@
+ALTER TABLE users add COLUMN identifier TINYINT (1) DEFAULT 0 AFTER is_delete;
+ALTER TABLE users add COLUMN id_card_front VARCHAR (255) AFTER identifier;
+ALTER TABLE users add COLUMN id_card_back VARCHAR (255) AFTER id_card_front;
+ALTER TABLE users add COLUMN portrait VARCHAR (255) AFTER id_card_back;
+ALTER TABLE users add COLUMN address VARCHAR (500) AFTER phone;
+https://web888.vn/huong-dan-xu-ly-sap-xep-file-theo-thoi-gian-cho-laravel-file-manager/
