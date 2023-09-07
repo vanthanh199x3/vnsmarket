@@ -5,6 +5,8 @@
 <div class="card mx-2">
     <h5 class="card-header">{{ __('adm.edit').' '.__('adm.product') }}</h5>
     <div class="card-body">
+ <input id="get_id_product" type="hidden" name="product_id" value="<?=$product->id;?>" />
+
       <form method="post" action="{{route('product.update',$product->id)}}">
         @csrf 
         @method('PATCH')
@@ -68,6 +70,39 @@
             </select>
           </div>
         </div>
+
+<!--THANH DEV  -->
+<div class="clear"></div>
+ <div class="form-group row">
+  <div class="controls">
+      <div class="multi-field-wrapper">
+          <div class="multi-fields">
+          <div class="multi-field_edit">
+            <?php  $k=0;
+               foreach ($edit_data_size as $d_size) { $k++;
+            if(isset($d_size->product_id)){?>
+            <label class="control-label"> Tên Size</label>
+            <input type="text" name="size_name[]" value="<?=$d_size->size_name;?>">
+            <label class="control-label"> Giá Gốc</label>
+            <input type="text"  name="size_price[]" value="<?=$d_size->size_price;?>">
+            <label class="control-label"> Giá Giảm </label>
+            <input type="text" name="size_price_sale[]" value="<?=$d_size->size_price_sale;?>">
+            <input type="hidden" name="id_size[]" value="<?=$d_size->id;?>">
+            <button type="button"  onclick="javascript:delete_size(<?=$d_size->id;?>)" class="remove-field btn btn-primary delete-size"><i class="fa fa-trash-o"></i> Xoá</button>
+   <div class="clear"></div>
+
+    <?php } else {'';}?>
+   <?php }?>
+ </div><!--End multi-field-->
+ </div>
+    <button type="button" class="add-field_edit btn btn-primary"> <i class="fa fa-plus"></i>Thêm Size theo giá</button> 
+    </div>
+ </div>
+ </div> 
+ <div class="clear"></div> 
+ 
+ <!--THANH DEV  -->
+
 
         <div class="form-group">
           <label>{{ __('adm.link_titkok') }}</label>
@@ -365,5 +400,46 @@
       }
     });
 
+</script>
+
+<script type="text/javascript">
+  function delete_size(id)
+  {
+    var answer = confirm ("Bạn có chắc là muốn xóa ");
+    var product_id=$("#get_id_product").val();
+    if (answer)
+    {
+      $.ajax({
+        type: "POST",
+        url: "<?=url('ajax_delete_muti_size');?>",
+        data: {
+                id: id,product_id:product_id
+         },
+        success: function (data) {
+            location.reload();
+        }
+
+      });
+    }
+
+  }
+
+    var newIn ='';
+    $(".add-field_edit").click(function(e) {
+        newIn ='<div class="clear"></div>';
+        newIn +='<div class="wap_add">';
+        newIn +='<label class="control-label"> Tên Size </label>';
+        newIn +=' <input type="text"  name="size_name[]"> ';
+        newIn +='<label class="control-label"> Giá Gốc </label>';
+        newIn +=' <input type="text"  name="size_price[]">';
+        newIn +='<label class="control-label"> <i class="fa fa-usd"></i> Giá Giảm </label>';
+        newIn +='<input type="text"   name="size_price_sale[]"> ';
+        newIn +=' <button type="button" class="remove-field btn btn-primary"><i class="fa fa-trash-o"></i> Xoá</button>';
+        newIn +='<div class="clear"></div>';
+        $('.multi-field_edit:last-child').append(newIn);
+         $('.remove-field').click(function() {
+            $('.wap_add').remove();
+       });
+});
 </script>
 @endpush

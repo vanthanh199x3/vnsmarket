@@ -5,7 +5,7 @@
 <div class="card mx-2">
     <h5 class="card-header">{{ __('adm.add').' '.__('adm.product') }}</h5>
     <div class="card-body">
-      <form method="post" action="{{route('product.store')}}" id="formProduct">
+      <form method="post" action="{{route('product.store')}}" id="formProduct" enctype="multipart/form-data">
         {{csrf_field()}}
         <div class="form-group">
           <label for="inputTitle" class="">{{ __('adm.product_name') }} <span class="text-danger">*</span></label>
@@ -66,7 +66,31 @@
             </select>
           </div>
         </div>
-
+        
+      <div class="clear"></div>
+      <!--THANH DEV  -->
+      <div class="form-group row">
+              <div class="controls">
+                <div class="multi-field-wrapper">
+                  <div class="multi-fields">
+                    <div class="multi-field">
+                     <label class="control-label"><i class="fa fa-product-hunt"></i> Size (Kích cỡ)</label>
+                      <input type="text"  name="size_name[]">
+                      <label class="control-label"> Giá Gốc</label>
+                      <input type="text" name="size_price[]">
+                      <label class="control-label"> Giá Giảm </label>
+                      <input type="text" name="size_price_sale[]">
+                      <button type="button" class="remove-field btn btn-primary"> Xoá</button>
+                    </div>
+                  </div>
+                <button type="button" class="add-field btn btn-primary"> <i class="fa fa-plus"></i> Thêm size theo giá</button>
+                </div>
+              </div>
+            </div>
+          </div><!--End none-->
+      <!--THANH DEV  -->
+   <div class="clear"></div>
+   
         <div class="form-group">
           <label>{{ __('adm.link_titkok') }}</label>
           <input type="text" name="link_tiktok" placeholder="{{ __('adm.link_titkok') }}"  value="{{old('link_tiktok')}}" class="form-control">
