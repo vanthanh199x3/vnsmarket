@@ -113,8 +113,34 @@ class FrontendController extends Controller
             OpenGraph::setUrl(url()->current());
             OpenGraph::addImage($product_detail->photo, ['height' => 315, 'width' => 600 ]);
         } 
-        return view('frontend.pages.product_detail')->with('product_detail',$product_detail);
+
+          $get_size_row = DB::table('products')
+        ->join('tbl_size','tbl_size.product_id','=','products.id')
+        ->where('products.id',$product_detail->id)->first(); 
+
+         $get_size = DB::table('products')
+        ->join('tbl_size','tbl_size.product_id','=','products.id')
+        ->where('products.id',$product_detail->id)->get(); 
+
+
+        return view('frontend.pages.product_detail')->with('product_detail',$product_detail)->with('get_size',$get_size)->with('get_size_row',$get_size_row);
     }
+
+   public function ajax_load_price_size(Request $request)
+{
+    $id_size = $request->get_id_size; 
+    $id_pro = $request->id_pro; 
+
+    $get_size_row = Product::join('tbl_size', 'tbl_size.product_id', '=', 'products.id')
+        ->where('products.id', $id_pro)
+        ->where('tbl_size.id', $id_size)
+        ->first();
+
+    $price_size = view('frontend.pages.ajax.ajax_price_size', compact('get_size_row'))->render();
+
+    // Trả về JSON response
+    return response()->json(['price_size' => $price_size]);
+}
 
     public function productGrids(){
         SEOMeta::setTitle( __('web.product'));

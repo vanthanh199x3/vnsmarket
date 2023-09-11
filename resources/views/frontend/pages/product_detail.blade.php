@@ -17,6 +17,8 @@
 		</div>
 	</div>
 	<!-- End Breadcrumbs -->
+
+
 			
 	<!-- Shop Single -->
 	<section class="shop single section product-detail">
@@ -47,6 +49,8 @@
 						<div class="col-lg-6 col-12">
 							<div class="product-des">
 								<div class="short">
+								 <input type="hidden" id="id_pro"  value="{{$product_detail->id}}"/>
+
 									<h4>{{$product_detail->title}}</h4>
 									<div class="rating-main">
 										<ul class="rating">
@@ -66,17 +70,36 @@
 									@php 
 										$after_discount=($product_detail->price-(($product_detail->price*$product_detail->discount)/100));
 									@endphp
-									<p class="price">
+									<p class="price" id="load_ajax_price_size">
 										<span class="discount">{{number_format($after_discount)}} đ</span>
 										<span class="text-danger"><b>- {{ $product_detail->discount }}%</b></span>
 									</p>
+
+<form action="{{route('single-add-to-cart')}}" method="POST">
+
+  @if(isset($get_size_row->product_id) && !empty($get_size_row->size_price) && !empty($get_size_row->size_price_sale))
+    <div class="radio-group">
+        <div class="lable_size">Kích cỡ :</div>
+        <div class="clear"></div>
+
+        <div id="radio_check_size">
+        	 @foreach ($get_size as $d_size)
+			<input type="radio" name="check_size" value="{{ $d_size->id }}" /> {{ $d_size->size_name }}
+			   @endforeach
+		</div>
+    </div><!--End radio-group-->
+@else
+    {{--  --}}
+@endif  
+                                
+
 									<div class="price_token_box">
 										<p class="price_token text-uppercase">{{ __('web.product_price_token') }} <span class="text-warning">{{number_format($product_detail->price_token,2)}}</span> {{ $product_detail->token_unit() }}</p>
 										<p class="free_token text-uppercase">{{ __('web.free_token') }} <span class="text-warning">{{number_format($product_detail->free_token, 2)}}</span> {{ $product_detail->token_unit() }}</p>
 									</div>
 								</div>
 								<div class="product-buy">
-									<form action="{{route('single-add-to-cart')}}" method="POST">
+
 										@csrf 
 										<div class="quantity">
 											<!-- <h6 class="text-uppercase">{{ __('web.product_quantity') }} :</h6> -->
@@ -102,6 +125,8 @@
 											<a href="{{route('add-to-wishlist',$product_detail->slug)}}" class="btn min"><i class="ti-heart"></i></a>
 										</div>
 									</form>
+
+
 									<!-- <p class="availability text-uppercase">{{ __('web.stock') }} - @if($product_detail->stock>0)<b>{{$product_detail->stock}}</b>@else <span class="badge badge-danger">{{$product_detail->stock}}</span>  @endif</p> -->
 									<p class="cat mt-4 mb-4">{{ __('web.category') }} - <a class="text-primary" href="{{route('product-cat',$product_detail->cat_info['slug'])}}">{{$product_detail->cat_info['title']}}</a></p>
 								</div>
@@ -402,10 +427,57 @@
 		.star-rating__input:checked ~ .star-rating__ico:before {
 		content: "\F005";
 		}
+
+		/*	thanh dev	*/
+		.radio-group {
+		    position: relative;
+		}
+		.radio {
+	    display: inline-block;
+	    line-height: 30px;
+	    margin-bottom: 15px;
+	    margin-right: 10px;
+	    border: 1px solid #dedede;
+	    cursor: pointer;
+	    width: 60px;
+	    height: 30px;
+	    text-align: center;
+	    /* overflow: hidden; */
+	}
+
+	.radio.selected {
+    border: 1px solid #25a8e0;
+   }
+
+		/*	thanh dev	*/
+
 	</style>
 @endpush
 @push('scripts')
+
+
 <script>
+	// thanh dev
+	$(document).ready(function(){
+	$('#radio_check_size input').on('change', function(e) {
+      e.preventDefault();
+    var get_id_size = $('input[name="check_size"]:checked', '#radio_check_size').val(); 
+    var id_pro = $("#id_pro").val();
+
+     $.ajax({
+                    url:"<?=url('ajax_load_price_size');?>",
+                    method : "GET",
+                    data :{ get_id_size:get_id_size,id_pro:id_pro},
+                    async: true,
+                    dataType : 'json',
+                    success: function(data){
+                        $('#load_ajax_price_size').html(data.price_size);
+                    }
+                });
+                return true;
+});
+}); 
+		// thanh dev
 	let tiktok_box=$(".video_tiktok"),tiktok_link=tiktok_box.find("input").val();""!=tiktok_link&&$.get("https://www.tiktok.com/oembed?url="+tiktok_link,function(t){t&&t.html&&tiktok_box.html(t.html)});let youtube_box=$(".video_youtube"),youtube_link=youtube_box.find("input").val();if(""!=youtube_link){var t=youtube_parser(youtube_link);t&&youtube_box.find("iframe").attr("src","https://www.youtube.com/embed/"+t)}function youtube_parser(t){var o=t.match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/);return!!o&&11==o[7].length&&o[7]}
 </script>
 @endpush

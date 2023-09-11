@@ -186,10 +186,7 @@
                         <td>{{ __('adm.customer_address') }}</td>
                         <td> : {{$order->address1}}, {{$order->address2}}</td>
                     </tr>
-                    <tr>
-                        <td>{{ __('adm.province') }}</td>
-                        <td> : {{$order->province->name}}</td>
-                    </tr>
+            
                     <!-- <tr>
                         <td>{{ __('adm.customer_country') }}</td>
                         <td> : {{$order->country}}</td>
