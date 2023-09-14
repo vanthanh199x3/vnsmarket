@@ -36,4 +36,8 @@
             {
               float: right;
             }
+            .old-price
+            {
+              display: none;
+            }
           </style>

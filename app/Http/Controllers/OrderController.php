@@ -100,7 +100,7 @@ class OrderController extends Controller
             $brand = Brand::find($request->brand_id);
 
             $data = [
-                'shop_id' =>  $brand->ghsv_id == 0 ? 460 : $brand->ghsv_id,
+                'shop_id' => $brand && $brand->ghsv_id == 0 ? 460 : ($brand ? $brand->ghsv_id : null),
                 'product' => $carts[0]->product->title,
                 'weight' => 1,
                 'price' => $orderData['sub_total'],
@@ -178,7 +178,7 @@ class OrderController extends Controller
     {
         $order = Order::where(['order_number' => $orderNumber])->first();
         $this->validate($request, [
-            'status' => 'required|in:new,process,delivered,cancel'
+            'status' => 'required|in:new,process,delivered,cancel,logistics'
         ]);
         $data = $request->all();
 
@@ -225,8 +225,9 @@ class OrderController extends Controller
         $order = Order::where('user_id', auth()->user()->id)->where('order_number', $request->order_number)->first();
         if ($order) {
             if ($order->status == "new") {
-                request()->session()->flash('message', 'Đơn hàng <b>' . $request->order_number . '</b> của bạn <b>ĐÃ ĐƯỢC TẠO</b>, vui lòng chờ đợi.');
+                request()->session()->flash('message', 'Đơn hàng <b>' . $request->order_number . '</b> của bạn <b>ĐÃ ĐƯỢC TẠO</b> vui lòng truy cập vào link <a style="color:#f00" href="http://vnsmarket.test/order">Đơn hàng đã mua</a> để theo dõi đơn hàng');
                 return redirect()->back();
+
             } elseif ($order->status == "process") {
                 request()->session()->flash('message', 'Đơn hàng <b>' . $request->order_number . '</b> của bạn <b>ĐANG ĐƯỢC XỬ LÝ</b>, vui lòng đợi thêm.');
                 return redirect()->back();
@@ -241,6 +242,7 @@ class OrderController extends Controller
             request()->session()->flash('message', 'Mã đơn đặt hàng không hợp lệ, vui lòng thử lại');
             return back();
         }
+
     }
 
     public function pdf(Request $request)

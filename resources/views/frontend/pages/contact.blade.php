@@ -103,7 +103,7 @@
 									</ul>
 								</div>
 								<div class="single-info">
-									<i class="fa fa-location-arrow"></i>
+									<a href="https://www.google.com/maps/place/125%2F53+Nguy%E1%BB%85n+V%C4%83n+Th%C6%B0%C6%A1ng,+Ph%C6%B0%E1%BB%9Dng+25,+B%C3%ACnh+Th%E1%BA%A1nh,+Th%C3%A0nh+ph%E1%BB%91+H%E1%BB%93+Ch%C3%AD+Minh,+Vi%E1%BB%87t+Nam/@10.8008437,106.715725,17z/data=!3m1!4b1!4m6!3m5!1s0x317528a66e6e4365:0xfae8f6c2f7e2d9ba!8m2!3d10.8008384!4d106.7182999!16s%2Fg%2F11c88h82k1?hl=vi-VN&entry=ttu" target="target"> <i class="fa fa-location-arrow"></i></a>
 									<h4 class="title">{{ __('web.our_address') }}:</h4>
 									<ul>
 										<li>{{ $setting->address }}</li>

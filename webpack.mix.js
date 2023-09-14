@@ -14,6 +14,8 @@ const mix = require('laravel-mix');
 // mix.js('resources/js/app.js', 'public/js')
 //     .sass('resources/sass/app.scss', 'public/css');
 
+// sửa css thì sửa ở máy file này, không phải trong public, xong chạy "npm run prod", nó sẽ mix file ra public
+// nó sẽ nén 3 file thành 1 file main.css, để tối ưu
 mix.styles([
     'resources/css/frontend/reset.css',    
     'resources/css/frontend/style.css',    

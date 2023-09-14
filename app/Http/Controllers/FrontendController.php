@@ -543,7 +543,7 @@ class FrontendController extends Controller
         if ($ref != '') {
             $affiliateId = \Helper::getReferrer($ref);
             $affiliateUser = User::find($affiliateId);
-            $affiliateEmail = $affiliateUser->email;
+            $affiliateEmail = $affiliateUser->phone;
         }
 
         return view('frontend.pages.register', compact('affiliateEmail'));

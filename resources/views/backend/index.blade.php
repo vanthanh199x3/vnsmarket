@@ -42,7 +42,7 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-uppercase mb-1">Tổng doanh thu</div>
                                     <div class="h5 mb-0 font-weight-bold value">
-                                        591,466,500
+                                        755,793,800
                                     </div>
                                 </div>
                             </div>
@@ -101,7 +101,7 @@
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Shop con</div>
                                 <div class="row no-gutters align-items-center">
                                     <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">77</div>
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">81</div>
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +142,7 @@
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-uppercase mb-1">Hoa hồng</div>
                                     <div class="h5 mb-0 font-weight-bold value">
-                                        {{ number_format(147750500) }}
+                                        {{ number_format(183902506) }}
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +159,7 @@
                                 <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Nhà cung cấp</div>
                                 <div class="row no-gutters align-items-center">
                                     <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">37</div>
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">39</div>
                                     </div>
                                 </div>
                             </div>
@@ -202,7 +202,7 @@
                                     <div class="col-auto">
                                         <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
                                             {{-- {{ \App\Models\Order::countActiveOrder() + 500 }} --}}
-                                         749</div>
+                                         1062</div>
                                     </div>
 
                                 </div>
@@ -226,7 +226,7 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col-auto">
                                         {{-- <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{\App\User::countActiveUser()}}</div> --}}
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">731</div>
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">880</div>
                                     </div>
 
                                 </div>

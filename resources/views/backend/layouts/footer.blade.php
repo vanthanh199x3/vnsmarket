@@ -48,6 +48,7 @@
 
   <!-- Custom scripts for all pages-->
   <script src="{{asset('backend/js/sb-admin-2.min.js')}}"></script>
+  <script src="{{asset('backend/js/admin-dev.js')}}"></script>
 
   <!-- Page level plugins -->
   <script src="{{asset('backend/vendor/chart.js/Chart.min.js')}}"></script>

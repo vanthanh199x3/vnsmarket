@@ -196,8 +196,8 @@ class ProductController extends Controller
         $size_price = $request->size_price;
         $size_price_sale = $request->size_price_sale;
         $id_size = $request->id_size;
-
-        for ($j = 0; $j < count($size_name); $j++) {
+        $count = is_array($size_name) ? count($size_name) : 0;
+        for ($j = 0; $j < $count; $j++) {
             if (!empty($size_name[$j])) {
                 $data_size = [
                     'size_name' => $size_name[$j],

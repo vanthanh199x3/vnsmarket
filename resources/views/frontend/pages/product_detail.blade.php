@@ -23,6 +23,13 @@
 	<!-- Shop Single -->
 	<section class="shop single section product-detail">
 		<div class="container">
+
+			@if(session('message'))
+		    <div class="alertss">
+		        {!! session('message') !!}
+		    </div>
+		   @endif
+					
 			<div class="row px-3 mt-3 justify-content-center"> 
 				<div class="col-md-10 rounded pb-4 bg-white">
 					<div class="row">
@@ -449,6 +456,23 @@
     border: 1px solid #25a8e0;
    }
 
+.add-to-cart-success {
+    cursor: default;
+    position: absolute;
+    background: #fff;
+    box-shadow: 1px 1px 15px #b3b3b3;
+    right: 60px;
+    padding: 15px 20px;
+    z-index: 9999;
+    top: 7px;
+    border-radius: 6px;
+    left: auto;
+}	.add-to-cart-success .close{opacity:.8;position:absolute;top:3px;right:5px;cursor:pointer;font-size:28px;line-height:1;color:#000;text-shadow:0 1px 0 #fff}
+	.add-to-cart-success p.text{font-size:14px;color:#333;margin:0 10px 10px}
+	.add-to-cart-success p.text i{color:#1db33f}
+	.add-to-cart-success .btn{padding:8px 16px;margin:0 10px;background:#5ad3c0;color:#fff;font-size:14px;font-weight:200;border-radius:4px;text-align:center;border:0;cursor:pointer}
+	.add-to-cart-success:after{content:"";position:absolute;width:11px;height:11px;top:-4px;right:15px;-webkit-transform:rotate(45deg);transform:rotate(45deg);background:#fff;box-shadow:-1px -1px 0 #dfdfdf;z-index:-1}
+
 		/*	thanh dev	*/
 
 	</style>
@@ -476,6 +500,9 @@
                 });
                 return true;
 });
+	$(".close").click(function (event) {
+		$(".add-to-cart-success").hide();
+	});
 }); 
 		// thanh dev
 	let tiktok_box=$(".video_tiktok"),tiktok_link=tiktok_box.find("input").val();""!=tiktok_link&&$.get("https://www.tiktok.com/oembed?url="+tiktok_link,function(t){t&&t.html&&tiktok_box.html(t.html)});let youtube_box=$(".video_youtube"),youtube_link=youtube_box.find("input").val();if(""!=youtube_link){var t=youtube_parser(youtube_link);t&&youtube_box.find("iframe").attr("src","https://www.youtube.com/embed/"+t)}function youtube_parser(t){var o=t.match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/);return!!o&&11==o[7].length&&o[7]}

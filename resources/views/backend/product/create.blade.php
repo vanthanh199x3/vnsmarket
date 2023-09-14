@@ -58,7 +58,7 @@
           </div>
           <div class="col-md-6">
             <label for="brand_id">{{ __('adm.brand') }}</label>
-            <select name="brand_id" class="form-control">
+            <select name="brand_id" class="form-control" required>
                 <option value="">{{ __('adm.select') }}</option>
               @foreach($brands as $brand)
                 <option value="{{$brand->id}}">{{$brand->title}}</option>
@@ -76,9 +76,9 @@
                     <div class="multi-field">
                      <label class="control-label"><i class="fa fa-product-hunt"></i> Size (Kích cỡ)</label>
                       <input type="text"  name="size_name[]">
-                      <label class="control-label"> Giá Gốc</label>
+                      <label class="control-label"> Giá Nhập</label>
                       <input type="text" name="size_price[]">
-                      <label class="control-label"> Giá Giảm </label>
+                      <label class="control-label"> Giá Bán </label>
                       <input type="text" name="size_price_sale[]">
                       <button type="button" class="remove-field btn btn-primary"> Xoá</button>
                     </div>
@@ -124,14 +124,14 @@
 
         <div class="form-group row">
           <div class="col-md-4">
-            <label class="">{{ __('adm.product_import_price') }} <span class="text-danger">*</span></label>
+            <label class="">{{ __('adm.product_import_price') }} <span class="text-danger"></span></label>
             <input type="number" name="import_price" placeholder="{{ __('adm.product_import_price') }}"  value="{{old('import_price')}}" class="form-control">
             @error('import_price')
             <span class="text-danger">{{$message}}</span>
             @enderror
           </div>
           <div class="col-md-4">
-            <label for="price" class="">{{ __('adm.product_price') }} <span class="text-danger">*</span></label>
+            <label for="price" class="">{{ __('adm.product_price') }} <span class="text-danger"></span></label>
             <input id="price" type="number" name="price" placeholder="{{ __('adm.product_price') }}"  value="{{old('price')}}" class="form-control">
             @error('price')
             <span class="text-danger">{{$message}}</span>
@@ -314,11 +314,11 @@
           url: true
         },
         import_price: {
-          required: true,
+          required: false,
           number: true
         },
         price: {
-          required: true,
+          required: false,
           number: true
         },
         discount: {

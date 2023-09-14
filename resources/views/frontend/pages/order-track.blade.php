@@ -19,9 +19,9 @@
     <!-- End Breadcrumbs -->
 <section class="tracking_box_area section_gap py-5">
     <div class="container">
-        @if(session('message'))
+        @if(session('success'))
             <div class="message-success fade show mb-4">
-                {!! session('message') !!}
+                {!! session('success') !!}
             </div>
         @endif
         <div class="tracking_box_inner">

@@ -1,6 +1,6 @@
 <?php
 
-
+// echo "xong roi nha a";die;
 
 use Illuminate\Support\Facades\Route;
 
@@ -69,7 +69,6 @@ Route::get('login/{provider}/callback/', 'Auth\LoginController@Callback')->name(
 
 
 Route::get('/','FrontendController@home')->name('home');
-
 
 
 // Frontend Routes
@@ -150,7 +149,7 @@ Route::match(['get','post'],'/filter','FrontendController@productFilter')->name(
 
 Route::get('/product/track','OrderController@orderTrack')->name('order.track');
 
-Route::post('product/track/order','OrderController@productTrackOrder')->name('product.track.order');
+Route::post('product/track/order','OrderController@productTrackOrder')->name('product.track.order')->middleware('user');
 
 // Blog
 
@@ -250,7 +249,14 @@ Route::group(['prefix'=>'/admin','middleware'=>['auth','admin']],function(){
 
     Route::resource('/product','ProductController');
 
-    
+    //Gallery
+    Route::get('add-gallery/{product_id}','GalleryController@add_gallery');
+    Route::post('select-gallery','GalleryController@select_gallery');
+    Route::post('insert-gallery/{pro_id}','GalleryController@insert_gallery');
+    Route::post('update-gallery-name','GalleryController@update_gallery_name');
+    Route::post('delete-gallery','GalleryController@delete_gallery');
+    Route::post('update-gallery','GalleryController@update_gallery');
+
 
     // Ajax for sub category
 

@@ -38,6 +38,8 @@
                   <span class="badge badge-warning">Đang xử lý</span>
                 @elseif($order->status=='delivered')
                   <span class="badge badge-primary">Đã vận chuyển</span>
+                 @elseif($order->status=='logistics')
+                  <span class="badge badge-primary">Đã chuyển logistics</span>
                 @else
                   <span class="badge badge-danger">Hủy</span>
                 @endif
@@ -128,6 +130,9 @@
                             Đang xử lý
                           @elseif($order->status=='delivered')
                             Đã vận chuyển
+                          @elseif($order->status=='logistics')
+                            Đã chuyển logistics
+                            
                           @else
                             Hủy
                           @endif

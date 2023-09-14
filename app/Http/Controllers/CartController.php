@@ -199,6 +199,9 @@ class CartController extends Controller
 
         }
         request()->session()->flash('success','Đã thêm vào giỏ hàng');
+
+        request()->session()->flash('message','<div class="add-to-cart-success"><span class="close"> × </span><p class="text"><i class="fa fa-check-circle-o"></i> Thêm vào giỏ hàng thành công! </p><a class="btn" href="http://vnsmarket.test/checkout">Thanh toán</a>  <a class="btn" href="/">Tiếp tục mua hàng</a></div>');
+
         $couponCode = session()->get('coupon')['code'] ?? "";
         if($couponCode != "")
         {
@@ -217,45 +220,27 @@ class CartController extends Controller
 
 
     public function cartDelete(Request $request){
-
         $cart = Cart::find($request->id);
-
         if ($cart) {
-
             $cart->delete();
-
             request()->session()->flash('success','Đã xóa khỏi giỏ hàng');
-
             $couponCode = session()->get('coupon')['code'] ?? "";
-
             if($couponCode != "")
-
             {
 
                 $coupon=Coupon::where('code',$couponCode)->first();
-
                 $total_price=Cart::where('user_id',auth()->user()->id)->where('order_number',null)->sum('amount');
-
                 // dd($total_price);
-
                 session()->put('coupon',[
-
                     'id'=>$coupon->id,
-
                     'code'=>$coupon->code,
-
                     'value'=>$coupon->discount($total_price)
-
                 ]);
-
             }
-
             return back();
-
         }
 
         request()->session()->flash('error','Đã xay ra lỗi, xin hãy thử lại');
-
         return back();
 
     }

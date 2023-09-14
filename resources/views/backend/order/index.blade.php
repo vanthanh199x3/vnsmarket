@@ -24,6 +24,9 @@
               <option value="process" {{(( request()->status=='process')? 'selected' : '')}}>Đang xử lý</option>
               <option value="delivered" {{((request()->status=='delivered')? 'selected' : '')}}>Đã vận chuyển</option>
               <option value="cancel" {{((request()->status=='cancel')? 'selected' : '')}}>Hủy</option>
+
+             <option value="logistics" {{((request()->status=='logistics')? 'selected' : '')}}>Đã chuyển Logistics</option>
+
             </select>
           </div>
           <div class="col-3">
@@ -79,6 +82,8 @@
                         <span class="badge badge-warning">Đang xử lý</span>
                       @elseif($order->status=='delivered')
                         <span class="badge badge-primary">Đã vận chuyển</span>
+                      @elseif($order->status=='logistics')
+                        <span class="badge badge-primary">Đã chuyển Logistics</span>
                       @else
                         <span class="badge badge-danger">Hủy</span>
                       @endif

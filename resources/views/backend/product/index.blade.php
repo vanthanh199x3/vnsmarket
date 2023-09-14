@@ -33,6 +33,7 @@
               <th>{{ __('adm.photo') }}</th>
               <th>{{ __('adm.product_name') }}</th>
               <th>{{ __('adm.category') }}</th>
+              <th>Thư viện ảnh</th>
               <th>{{ __('adm.product_import_price') }}</th>
               <th>{{ __('adm.product_price') }}</th>
               <!-- <th>{{ __('adm.product_discount') }}</th> -->
@@ -63,6 +64,8 @@
                           {{$product->sub_cat_info->title ?? ''}}
                       </sub>
                     </td>
+                    <td><a href="{{url('/add-gallery/'.$product->id)}}">Thêm TV ảnh</a></td>
+
                     <td><b>{{ number_format($product->import_price) }}</b></td>
                     <td><b class="text-success">{{ number_format($product->price) }}</b></td>
                     <!-- <td>  {{$product->discount}}% OFF</td> -->
