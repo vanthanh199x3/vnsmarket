@@ -22,6 +22,11 @@
     <!-- Start Checkout -->
     <section class="shop checkout section">
         <div class="container">
+              @if(session('message'))
+            <div class="alertss">
+                {!! session('message') !!}
+            </div>
+           @endif
             @if (Helper::getAllProductFromCart()->count())
                 <form id="formOrder" class="form" method="POST" action="{{ route('cart.order') }}">
                     @csrf
@@ -78,7 +83,7 @@
                                     <div class="col-lg-6 col-md-6 col-12">
                                         <div class="form-group">
                                             <input type="hidden" name="country" value="VN">
-                                            <label>{{ __('web.province') }}<span>*</span></label>
+                                            <label>{{ __('web.province') }}<span>(1)</span></label>
                                             <select name="province_id" id="province-select" class="select2"
                                                 style="width:100%">
                                                 <option value="">{{ __('web.select_province') }}</option>
@@ -88,7 +93,7 @@
 
                                     <div class="col-lg-6 col-md-6 col-12">
                                         <div class="form-group">
-                                            <label>{{ __('web.district') }}<span>*</span></label>
+                                            <label>{{ __('web.district') }}<span>(2)</span></label>
                                             <select name="district_id" id="district-select" class="select2"
                                                 style="width:100%">
                                             </select>
@@ -97,7 +102,7 @@
 
                                     <div class="col-lg-6 col-md-6 col-12">
                                         <div class="form-group">
-                                            <label>{{ __('web.ward') }}<span>*</span></label>
+                                            <label>{{ __('web.ward') }}<span>(3)</span></label>
                                             <select name="ward_id" id="ward-select" class="select2" style="width:100%">
                                             </select>
                                         </div>
@@ -129,6 +134,40 @@
                         </div>
                         <div class="col-lg-4 col-12">
                             <div class="order-details">
+                                    <?php if(auth()->user()->points==0){echo 'Không đủ điểm VNSe';}else{?>
+
+                          <div class="bYLwaT active_points">
+                            <i class="fa fa-university checkout-swap-icon"></i>
+                                <div class="checkout-swap-content">
+                                    <div class="checkout-swap-content__title">
+                                        <span>Giảm {{number_format(auth()->user()->points*48)}} ₫</span>
+                                    </div>
+                                    <div class="checkout-swap-content__sub-title">Khi dùng {{auth()->user()->points}} VNSe của bạn</div>
+                                </div>
+
+                                <div class="checkout-swap-switch">
+                                    
+                          <div class="switch-point" data-id="{{auth()->user()->id}}">
+                                  <label>
+                                  <?php if (auth()->user()->active_points == 1) { ?>
+                                     <label class="switch switch-point">
+                                        <input type="checkbox" checked="">
+                                        <span class="slider round"></span>
+                                    </label>
+                                     <?php } else {?>
+                                      <label class="switch switch-point">
+                                            <input type="checkbox">
+                                            <span class="slider round"></span>
+                                        </label>
+                                   <?php }?> 
+                                  </label>
+                                   </div>
+                                </div><!--End chec active point-->
+
+                          <?php }?>
+
+                        </div>
+
                                 <!-- Order Widget -->
                                 <div class="single-widget">
                                     <h2>{{ __('web.product_total') }}</h2>
@@ -151,20 +190,28 @@
                                                         @endif
                                                     </li> -->
 
+                          <li class="shipping"> {{ __('web.shipping_fee') }}  <span id="fee-shop">23000</span></li>
+
                                             @if (session('coupon'))
                                                 <li class="coupon_price" data-price="{{ session('coupon')['value'] }}">
                                                     {{ __('web.your_save') }}<span>{{ number_format(session('coupon')['value']) }}
                                                         VND</span></li>
                                             @endif
                                             @php
-                                                $total_amount = Helper::totalCartPrice();
+                                                $total_amount = Helper::totalCartPrice()+23000;
                                                 if (session('coupon')) {
                                                     $total_amount = $total_amount - session('coupon')['value'];
                                                 }
                                             @endphp
-                                            <li class="last" id="order_total_price" data-money="{{ $total_amount }}">
-                                                {{ __('web.cart_subtotal') }}<span><b>{{ number_format($total_amount) }}
-                                                        VND</b></span></li>
+     <?php if (auth()->user()->active_points == 1) { 
+        $total_point=$total_amount-auth()->user()->points*48;
+    ?>
+ <li class="summary-label">Giảm giá khi dùng VNSe  -{{number_format(auth()->user()->points*48)}}đ</li>
+ <li class="last" id="order_total_price" data-money="{{ $total_point }}">{{ __('web.cart_subtotal') }}<span><b>{{ number_format($total_point) }} VND</b></span></li>
+
+<?php } else {?>
+       <li class="last" id="order_total_price" data-money="{{ $total_amount }}">{{ __('web.cart_subtotal') }}<span><b>{{ number_format($total_amount) }} VND</b></span></li>
+<?php }?>
                                         </ul>
                                     </div>
                                 </div>
@@ -269,6 +316,140 @@
 @endsection
 @push('styles')
     <style>
+            /*    THANH DEV    */
+.add-to-cart-success {
+    cursor: default;
+    position: absolute;
+    background: #fff;
+    box-shadow: 1px 1px 15px #b3b3b3;
+    /* right: 60px; */
+    padding: 15px 20px;
+    z-index: 9999;
+    top: 7px;
+    border-radius: 6px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+  .add-to-cart-success .close{opacity:.8;position:absolute;top:3px;right:5px;cursor:pointer;font-size:28px;line-height:1;color:#000;text-shadow:0 1px 0 #fff}
+    .add-to-cart-success p.text{font-size:14px;color:#333;margin:0 10px 10px}
+    .add-to-cart-success p.text i{color:#1db33f}
+    .add-to-cart-success .btn{padding:8px 16px;margin:0 10px;background:#5ad3c0;color:#fff;font-size:14px;font-weight:200;border-radius:4px;text-align:center;border:0;cursor:pointer}
+    .add-to-cart-success:after{content:"";position:absolute;width:11px;height:11px;top:-4px;right:15px;-webkit-transform:rotate(45deg);transform:rotate(45deg);background:#fff;box-shadow:-1px -1px 0 #dfdfdf;z-index:-1}
+         .bYLwaT {
+            display: flex;
+            padding: 12px 16px;
+            background-color: rgb(255, 255, 255);
+        }
+
+        .bYLwaT .checkout-swap-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            margin-right: 8px;
+        }
+        .bYLwaT .checkout-swap-content {
+        flex: 1 1 0%;
+            margin-right: 8px;
+        }
+
+        .bYLwaT .checkout-swap-content__title {
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 150%;
+            color: rgb(39, 39, 42);
+            margin-bottom: 4px;
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+        }
+                .bYLwaT .checkout-swap-content__title span {
+                display: -webkit-box;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+            }
+                .bYLwaT .checkout-swap-content__title .info-icon {
+                margin-left: 4px;
+                flex-shrink: 0;
+            }
+
+            .bYLwaT .checkout-swap-content__sub-title {
+                font-weight: 400;
+                font-size: 12px;
+                line-height: 150%;
+                color: rgb(128, 128, 137);
+            }
+
+            .IvzMw {
+                position: relative;
+                display: flex;
+                align-items: flex-start;
+            }
+
+            .switch {
+             position: relative;
+                display: inline-block;
+                width: 47px;
+                height: 22px;
+              }
+
+            .switch input { 
+              opacity: 0;
+              width: 0;
+              height: 0;
+            }
+
+            .slider {
+              position: absolute;
+              cursor: pointer;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: #ccc;
+              -webkit-transition: .4s;
+              transition: .4s;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 20px;
+                width: 20px;
+                left: 1px;
+                bottom: 1px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+            input:checked + .slider {
+              background-color: #2196F3;
+            }
+
+            input:focus + .slider {
+              box-shadow: 0 0 1px #2196F3;
+            }
+
+            input:checked + .slider:before {
+              -webkit-transform: translateX(26px);
+              -ms-transform: translateX(26px);
+              transform: translateX(26px);
+            }
+
+            /* Rounded sliders */
+            .slider.round {
+              border-radius: 34px;
+            }
+
+            .slider.round:before {
+              border-radius: 50%;
+            }
+
+
+        /*    THANH DEV    */
         li.shipping {
             display: inline-flex;
             width: 100%;
@@ -320,6 +501,9 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+             $(".close").click(function (event) {
+                    $(".add-to-cart-success").hide();
+                });
             // Lấy danh sách tỉnh thành từ API và điền vào select box
             $.ajax({
                 url: '/api/address/provinces',
@@ -375,6 +559,36 @@
     </script>
     <script>
         $(document).ready(function() {
+
+             var user_id;
+            $(document).on("click", ".switch-point", function() {
+                user_id = $(this).data('id');
+            });
+
+            $(".switch-point").find("input[type=checkbox]").on("change",function() {
+                var status = $(this).prop('checked');
+                if(status == true) {
+                    status = "1";
+                } else {
+                    status = "0";
+                }
+                $.ajax ({
+                    url:"<?=url('ajax_update_active_points');?>",
+                    type: 'GET',
+                    data:{user_id:user_id,status:status},
+                    success: function(response) {
+                    // alert(response.message);
+                    location.reload();
+                    // You can update the UI or perform additional actions here
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+
+
+
+            });
 
             $("select.select2").select2();
             // $('select.nice-select').niceSelect();

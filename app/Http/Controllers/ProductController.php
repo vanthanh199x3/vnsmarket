@@ -75,6 +75,8 @@ class ProductController extends Controller
             'is_featured'=>'sometimes|in:1',
             'status'=>'required|in:active,inactive',
             'condition'=>'required|in:default,new,hot',
+            'percent_VNSe'=>'required|numeric',
+            'points_VNSe'=>'required|numeric',
             'import_price'=>'required|numeric',
             'price'=>'required|numeric',
             'discount'=>'nullable|numeric'
@@ -182,6 +184,8 @@ class ProductController extends Controller
             'unit_id' => 'nullable|exists:units,id',
             'status' => 'required|in:active,inactive',
             'condition' => 'required|in:default,new,hot',
+            'percent_VNSe'=>'required|numeric',
+            'points_VNSe'=>'required|numeric',
             'import_price' => 'nullable|numeric',
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric'

@@ -17,8 +17,6 @@
 		</div>
 	</div>
 	<!-- End Breadcrumbs -->
-
-
 			
 	<!-- Shop Single -->
 	<section class="shop single section product-detail">
@@ -118,6 +116,9 @@
 													</button>
 												</div>
 												<input type="hidden" name="slug" value="{{$product_detail->slug}}">
+
+											 <input type="hidden" name="pointsEarned"  value="{{$product_detail->points_VNSe}}"/>
+											 <input type="hidden" name="points_percent"  value="{{$product_detail->percent_VNSe}}"/>
 												<input type="text" name="quant[1]" class="input-number"  data-min="1" data-max="1000" value="1" id="quantity">
 												<div class="button plus">
 													<button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
@@ -456,7 +457,7 @@
     border: 1px solid #25a8e0;
    }
 
-.add-to-cart-success {
+	.add-to-cart-success {
     cursor: default;
     position: absolute;
     background: #fff;

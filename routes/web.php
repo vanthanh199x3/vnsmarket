@@ -201,6 +201,7 @@ Route::get('payment/success', 'PayPalController@success')->name('payment.success
 
 // Backend section start
     Route::get('ajax_load_price_size', 'FrontendController@ajax_load_price_size');
+    Route::get('ajax_update_active_points', 'OrderController@ajax_update_active_points');
     Route::post('ajax_delete_muti_size', 'ProductController@delete_muti_size');
 
 Route::group(['prefix'=>'/admin','middleware'=>['auth','admin']],function(){
@@ -449,7 +450,7 @@ Route::group(['middleware'=>['user']],function(){
     // User profile - Web layout
 
     Route::match(['get', 'post'], 'profile','FrontendController@profile')->name('web.user.profile');
-
+    Route::match(['get', 'post'], 'points','FrontendController@points')->name('web.user.points');
     Route::match(['get', 'post'], 'password','FrontendController@password')->name('web.user.password');
 
     Route::match(['get', 'post'], 'order','FrontendController@order')->name('web.user.order');

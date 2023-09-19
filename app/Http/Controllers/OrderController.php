@@ -66,6 +66,9 @@ class OrderController extends Controller
 
             $carts = Cart::selectRaw('carts.*')
                 ->where('user_id', $user->id)->where('order_number', null)->get();
+            $get_row_carts = Cart::selectRaw('carts.*')
+                ->where('user_id', $user->id)->where('order_number', null)->first();
+
 
             if (empty($carts)) {
                 request()->session()->flash('error', 'Không có sản phẩm nào trong giỏ hàng!');
@@ -87,6 +90,22 @@ class OrderController extends Controller
 
             $orderData['coupon'] = $coupon;
             $orderData['total_amount'] = $orderData['sub_total'] + $shippingFee - $coupon;
+           
+            $pointsEarned = ($get_row_carts->pointsEarned * $get_row_carts->points_percent)/100;
+            $user->points += $pointsEarned;
+            $user->save();
+                      
+
+
+            if($user->active_points==1)
+            {
+              $orderData['total_amount'] = $orderData['sub_total'] + $shippingFee - $user->points*48;
+              $user->points=0;
+              $user->active_points=0;
+              $user->save();
+            }
+          
+
 
             if ($request->payment_method == 'cod') {
                 $orderData['payment_status'] = 'unpaid';
@@ -97,21 +116,7 @@ class OrderController extends Controller
             }
 
             $order->fill($orderData);
-            $brand = Brand::find($request->brand_id);
-
-            $data = [
-                'shop_id' => $brand && $brand->ghsv_id == 0 ? 460 : ($brand ? $brand->ghsv_id : null),
-                'product' => $carts[0]->product->title,
-                'weight' => 1,
-                'price' => $orderData['sub_total'],
-                'to_name' => $request->input('full_name'),
-                'to_phone' => $request->input('phone'),
-                'to_province' => $request->input('province_id'),
-                'to_district' => $request->input('district_id'),
-                'to_ward' => $request->input('ward_id'),
-                'to_address' => $request->input('address1')
-            ];
-
+            
            
                 $status = $order->save();
                 if ($status) {
@@ -148,8 +153,10 @@ class OrderController extends Controller
                     Notification::send($users, new StatusNotification($details));
                     session()->forget('cart');
                     session()->forget('coupon');
-                    request()->session()->flash('success', 'Tạo đơn hàng thành công, đơn hàng sẽ được vận chuyển đến bạn trong thời gian sớm nhất.');
-                    return redirect()->route('home');
+       
+
+                     request()->session()->flash('message','<div class="add-to-cart-success"><span class="close"> × </span><p class="text"><i class="fa fa-check-circle-o"></i> Đặt hàng thành công, đơn hàng sẽ được vận chuyển đến bạn trong thời gian sớm nhất! </p> </div>');
+                    return redirect()->back();
                 } 
                 else {
                     request()->session()->flash('error', 'Tạo đơn hàng thất bại, xin hãy thử lại, hoặc liên hệ với chúng tôi để đặt hàng nhanh chóng.');
@@ -159,6 +166,22 @@ class OrderController extends Controller
         } 
         catch (\Throwable $th) {
             return $th;
+        }
+    }
+
+       public function ajax_update_active_points(Request $request) {
+        $user_id = $request->input('user_id');
+        $status = $request->input('status');
+        $user = User::find($user_id);
+
+        if ($user) {
+            // Update active status points
+            $user->active_points = $status;
+            $user->save();
+
+            return response()->json(['message' => 'Điểm VNSe Đã được áp dụng']);
+        } else {
+            return response()->json(['message' => 'User not found'], 404);
         }
     }
 

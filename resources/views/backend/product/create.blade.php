@@ -123,6 +123,21 @@
         </div>
 
         <div class="form-group row">
+          <div class="col-md-6">
+            <label class="">% Thanh  toán VNSe <span class="text-danger"></span></label>
+           <input type="number" name="percent_VNSe" placeholder="% Thanh  toán VNSe"  class="form-control">
+     
+          </div>
+
+          <div class="col-md-6">
+            <label for="price" class="">Hoàn điểm VNSe <span class="text-danger"></span></label>
+            <input  type="number" name="points_VNSe" placeholder="Hoàn điểm VNSe"   class="form-control">
+         
+          </div>
+   
+         </div><!--End group-->
+
+        <div class="form-group row">
           <div class="col-md-4">
             <label class="">{{ __('adm.product_import_price') }} <span class="text-danger"></span></label>
             <input type="number" name="import_price" placeholder="{{ __('adm.product_import_price') }}"  value="{{old('import_price')}}" class="form-control">

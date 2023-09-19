@@ -142,6 +142,8 @@ class FrontendController extends Controller
     return response()->json(['price_size' => $price_size]);
 }
 
+ 
+
     public function productGrids(){
         SEOMeta::setTitle( __('web.product'));
         OpenGraph::setTitle( __('web.product'));
@@ -788,6 +790,12 @@ class FrontendController extends Controller
         ])->orderBy('id','DESC')->paginate(10);
 
         return view('frontend.pages.user.order', compact('orders'));
+    }
+
+     public function points() {
+        
+        $points = Auth()->user();
+        return view('frontend.pages.user.points', compact('points'));
     }
 
     public function token() {
