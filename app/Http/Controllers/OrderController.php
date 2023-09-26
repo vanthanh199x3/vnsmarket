@@ -254,10 +254,19 @@ class OrderController extends Controller
             } elseif ($order->status == "process") {
                 request()->session()->flash('message', 'Đơn hàng <b>' . $request->order_number . '</b> của bạn <b>ĐANG ĐƯỢC XỬ LÝ</b>, vui lòng đợi thêm.');
                 return redirect()->back();
-            } elseif ($order->status == "delivered") {
+            }
+
+             elseif ($order->status == "delivered") {
                 request()->session()->flash('message', 'Đơn hàng <b>' . $request->order_number . '</b> của bạn đã được <b>GIAO HÀNG THÀNH CÔNG</b>.');
                 return redirect()->back();
-            } else {
+            } 
+            elseif ($order->status == "logistics") {
+                request()->session()->flash('message', 'Đơn hàng <b>' . $request->order_number . '</b> của bạn đã được <b>Chuyển logistics</b>.');
+                return redirect()->back();
+            } 
+
+
+            else {
                 request()->session()->flash('message', 'Đơn hàng <b>' . $request->order_number . '</b> của bạn <b>ĐÃ BỊ HỦY</b>');
                 return redirect()->back();
             }

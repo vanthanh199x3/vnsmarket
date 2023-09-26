@@ -67,18 +67,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    {{-- <div class="col-lg-6 col-md-6 col-12">
-                                        <div class="form-group">
-                                            <input type="hidden" name="country" value="VN">
-                                            <label>{{ __('web.province') }}<span>*</span></label>
-                                            <select name="province_id" class="select2" style="width:100%">
-                                                <option value="">{{ __('web.select_province') }}</option>
-                                                @foreach ($provinces as $province)
-                                                    <option value="{{ $province->id }}">{{ $province->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div> --}}
+                              
 
                                     <div class="col-lg-6 col-md-6 col-12">
                                         <div class="form-group">
@@ -499,68 +488,255 @@
     </style>
 @endpush
 @push('scripts')
-    <script>
-        $(document).ready(function() {
+     <script>
              $(".close").click(function (event) {
                     $(".add-to-cart-success").hide();
                 });
-            // Lấy danh sách tỉnh thành từ API và điền vào select box
-            $.ajax({
-                url: '/api/address/provinces',
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    var select = $('#province-select');
+        function checkAddress() {
+            // Lấy giá trị của các trường
+            var province = document.getElementById('province-select').value;
+            var district = document.getElementById('district-select').value;
+            var ward = document.getElementById('ward-select').value;
+            var address = document.getElementsByName('address1')[0].value;
 
-                    $.each(data, function(key, value) {
-                        select.append('<option value="' + value.code + '">' + value.name +
-                            '</option>');
-                    });
-                }
-            });
 
-            // Gọi AJAX khi thay đổi giá trị của select tỉnh thành
-            $('#province-select').on('change', function() {
-                var provinceCode = $(this).val();
+
+            // Kiểm tra xem tất cả các trường đã được điền hay chưa
+
+            if (province && district && ward && address) {
+
+                return true;
+
+            }
+
+            return false;
+
+        }
+
+
+
+        function checkFeeShip() {
+
+            // Lấy giá trị của các trường
+
+            var province = document.getElementById('province-select').value;
+            var district = document.getElementById('district-select').value;
+            var ward = document.getElementById('ward-select').value;
+            var address = document.getElementsByName('address1')[0].value;
+
+            // Kiểm tra xem tất cả các trường đã được điền hay chưa
+
+            $check = false;
+
+            if (province && district && ward && address) {
+
+                $check = true;
+
+            }
+
+
+
+            if (!$check) {
+
+                alert("Bạn phải nhập đủ thông tin để thanh toán");
+
+            }
+
+            else {
+
+                var data = {
+
+                    "shop_id": 460,
+
+                    "weight": 2000,
+
+                    "to_province": province,
+
+                    "to_district": district,
+
+                    "to_ward": ward
+
+                };
+
+
+
+                var jsonData = JSON.stringify(data);
+
+
 
                 $.ajax({
-                    url: '/api/address/districts/' + provinceCode,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        var select = $('#district-select');
 
-                        $.each(data, function(key, value) {
-                            select.append('<option value="' + value.code + '">' + value
-                                .name + '</option>');
-                        });
+                    url: "/api/check-fee-ship",
+
+                    type: "POST",
+
+                    headers: {
+
+                        "Content-Type": "application/json",
+
+                        "Access-Control-Allow-Origin": "*",
+
+                        "Accept": "*/*"
+
+                    },
+
+                    data: jsonData,
+
+                    success: function(response) {
+
+                        var feeshop = $('#fee-shop');
+
+                        feeshop.html(response);
+
+
+
                     }
-                });
-            });
 
-            // Gọi AJAX khi thay đổi giá trị của select quận huyện
-            $('#district-select').on('change', function() {
-                var districtCode = $(this).val();
-
-                $.ajax({
-                    url: '/api/address/wards/' + districtCode,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        var select = $('#ward-select');
-                        $.each(data, function(key, value) {
-                            select.append('<option value="' + value.code + '">' + value
-                                .name + '</option>');
-                        });
-                    }
                 });
-            });
-        });
-    </script>
-    <script>
+
+            }
+
+        }
+
+
+
         $(document).ready(function() {
 
-             var user_id;
+            // Lấy danh sách tỉnh thành từ API và điền vào select box
+
+            $.ajax({
+
+                url: '/api/address/provinces',
+
+                type: 'GET',
+
+                dataType: 'json',
+
+                success: function(data) {
+
+                    var select = $('#province-select');
+
+
+
+                    $.each(data, function(key, value) {
+
+                        select.append('<option value="' + value.name + '" data-code="' + value.code + '">' + value.name +
+
+                            '</option>');
+
+                    });
+
+                }
+
+            });
+
+
+
+            // Gọi AJAX khi thay đổi giá trị của select tỉnh thành
+
+            $('#province-select').on('change', function() {
+
+                var provinceCode = $(this).find('option:selected').data('code');
+
+
+
+                $.ajax({
+
+                    url: '/api/address/districts/' + provinceCode,
+
+                    type: 'GET',
+
+                    dataType: 'json',
+
+                    success: function(data) {
+
+                        var select = $('#district-select');
+
+                        var htmlText = "";
+
+                        $.each(data, function(key, value) {
+
+                            htmlText +='<option value="' + value.name + '" data-code="' + value.code + '">' + value
+
+                                .name + '</option>';
+
+                        });
+
+                        select.html(htmlText);
+
+                        $('#ward-select').html("");
+
+                    }
+
+                });
+
+            });
+
+
+
+            // Gọi AJAX khi thay đổi giá trị của select quận huyện
+
+            $('#district-select').on('change', function() {
+
+                var districtCode = $(this).find('option:selected').data('code');
+
+
+
+                $.ajax({
+
+                    url: '/api/address/wards/' + districtCode,
+
+                    type: 'GET',
+
+                    dataType: 'json',
+
+                    success: function(data) {
+
+                        var select = $('#ward-select');
+
+                        var htmlText = "";
+
+                        $.each(data, function(key, value) {
+
+                            htmlText +='<option value="' + value.name + '">' + value
+
+                                .name + '</option>';
+
+                        });
+
+                        select.html(htmlText);
+
+                    }
+
+                });
+
+            });
+
+
+
+            $('#ward-select').on('change', function() {
+
+                var check = checkAddress();
+
+            })
+
+
+
+            $('#address').on('change', function() {
+
+                var check = checkAddress();
+
+            })
+
+        });
+
+    </script>
+
+    <script>
+
+        $(document).ready(function() {
+
+          var user_id;
             $(document).on("click", ".switch-point", function() {
                 user_id = $(this).data('id');
             });
@@ -591,82 +767,172 @@
             });
 
             $("select.select2").select2();
+
             // $('select.nice-select').niceSelect();
 
+
+
             // $('.shipping select[name=shipping]').change(function(){
+
             //     let cost = parseFloat( $(this).find('option:selected').data('price') ) || 0;
+
             //     let subtotal = parseFloat( $('.order_subtotal').data('price') );
+
             //     let coupon = parseFloat( $('.coupon_price').data('price') ) || 0;
+
             //     // alert(coupon);
+
             //     $('#order_total_price span').text((subtotal + cost-coupon).toFixed(2));
+
             // });
 
+
+
             $('input[name="payment_method"]').click(function() {
+
                 $('.payment-info .payment-info-item').addClass('d-none');
+
                 $('.payment-info .' + $(this).attr('id')).removeClass('d-none');
+
             })
 
+
+
             $("#formOrder").validate({
+
                 rules: {
+
                     full_name: {
+
                         required: true,
+
                     },
+
                     email: {
+
                         required: true,
+
                         email: true,
+
                     },
+
                     phone: {
+
                         required: true,
+
                         number: true
+
                     },
+
                     province_id: {
+
                         required: true,
+
                     },
+
+                    district_id: {
+
+                        required: true,
+
+                    },
+
+                    ward_id: {
+
+                        required: true,
+
+                    },
+
                     address1: {
+
                         required: true,
+
                     },
+
                 }
+
             });
+
+
 
             $('#formOrder .submitOrder').click(function() {
 
+
+
                 if ($("#formOrder").valid()) {
 
+
+
                     var payment_method = $('input[name="payment_method"]:checked').val();
+
                     if (payment_method == 'dsvpay') {
+
                         console.log(payment_method)
+
+
 
                         if (confirm('Bạn có chắc muốn thanh toán thông qua ví DSVPAY')) {
 
+
+
                             var totalAmount = $('#order_total_price').attr('data-money');
+
                             var DSVPayBalance = $('.dsvpay_balance').attr('data-money');
+
                             if (parseInt(DSVPayBalance) < parseInt(totalAmount)) {
+
                                 alert('Số dư trong ví DSVPAY không đủ, vui lòng nạp thêm!');
+
                                 return;
+
                             } else {
+
                                 $("#formOrder").submit();
+
                             }
+
                         }
 
+
+
                     } else {
+
                         $("#formOrder").submit();
+
                     }
+
                 }
+
             });
+
+
 
         });
 
+
+
         // function showMe(box){
+
         //     var checkbox=document.getElementById('shipping').style.display;
+
         //     // alert(checkbox);
+
         //     var vis= 'none';
+
         //     if(checkbox=="none"){
+
         //         vis='block';
+
         //     }
+
         //     if(checkbox=="block"){
+
         //         vis="none";
+
         //     }
+
         //     document.getElementById(box).style.display=vis;
+
         // }
+
     </script>
 @endpush

@@ -204,6 +204,13 @@ Route::get('payment/success', 'PayPalController@success')->name('payment.success
     Route::get('ajax_update_active_points', 'OrderController@ajax_update_active_points');
     Route::post('ajax_delete_muti_size', 'ProductController@delete_muti_size');
 
+//Gallery
+Route::get('add-gallery/{product_id}','GalleryController@add_gallery');
+Route::post('select-gallery','GalleryController@select_gallery');
+Route::post('insert-gallery/{pro_id}','GalleryController@insert_gallery');
+Route::post('update-gallery-name','GalleryController@update_gallery_name');
+Route::post('delete-gallery','GalleryController@delete_gallery');
+Route::post('update-gallery','GalleryController@update_gallery');
 Route::group(['prefix'=>'/admin','middleware'=>['auth','admin']],function(){
 
     Route::get('/','AdminController@index')->name('admin');
@@ -250,14 +257,7 @@ Route::group(['prefix'=>'/admin','middleware'=>['auth','admin']],function(){
 
     Route::resource('/product','ProductController');
 
-    //Gallery
-    Route::get('add-gallery/{product_id}','GalleryController@add_gallery');
-    Route::post('select-gallery','GalleryController@select_gallery');
-    Route::post('insert-gallery/{pro_id}','GalleryController@insert_gallery');
-    Route::post('update-gallery-name','GalleryController@update_gallery_name');
-    Route::post('delete-gallery','GalleryController@delete_gallery');
-    Route::post('update-gallery','GalleryController@update_gallery');
-
+ 
 
     // Ajax for sub category
 

@@ -35,10 +35,70 @@
             </div>
         </div>
     </div>
+
+    <div class="container wap_sidebar">
+        <div class="row">
+                <div class="col-md-3 col-xs-12">
+                    <div class="shop-sidebar">
+                        <!-- Single Widget -->
+                        <div class="single-widget list-category">
+                            <h3 class="title mb-0">{{ __('web.category') }}</h3>
+                            @php
+                                $categories = Helper::getAllCategory();
+                            @endphp
+                            <div id="mn-wrapper">
+                                <div class="mn-sidebar">
+                                    <div class="mn-toggle"><i class="fa fa-bars"></i></div>
+                                    <div class="mn-navblock">
+                                        <ul class="mn-vnavigation">
+                                            @foreach($categories as $key1 => $lv1)
+                                                @if($lv1->child_cat->count() > 0)
+                                                    <li class="dropdown-submenu active">
+                                                        <a tabindex="-1" href="{{route('product-cat', $lv1->slug)}}"> <img class="img-cat" src="{{$lv1->photo}}" alt=""> {{$lv1->title}} <i class="fa fa-angle-right float-right mt-2"></i></a>
+                                                        <ul class="dropdown-menu">
+                                                            @foreach($lv1->child_cat as $key2 => $lv2)
+                                                                @if($lv2->child_cat->count() > 0)
+                                                                    <li class="dropdown-submenu active">
+                                                                        <a href="{{route('product-cat', $lv2->slug)}}">{{$lv2->title}} <i class="fa fa-angle-right float-right mt-2"></i></a>
+                                                                        <ul class="dropdown-menu parent">
+                                                                            @foreach($lv2->child_cat as $key3 => $lv3)
+                                                                                <li ><a href="{{route('product-cat', $lv3->slug)}}">{{$lv3->title}}</a></li>
+                                                                            @endforeach
+                                                                        </ul>
+                                                                    </li>
+                                                                @else
+                                                                    <li><a href="{{route('product-cat', $lv2->slug)}}">{{$lv2->title}}</a></li>
+                                                                @endif
+                                                            @endforeach
+                                                        </ul>
+                                                    </li>
+                                                @else
+                                                    <li><a href="{{route('product-cat', $lv1->slug)}}"> <img class="img-cat" src="{{$lv1->photo}}" alt="">{{$lv1->title}}</a></li>
+                                                @endif
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                    <!-- <div class="text-right collapse-button" style="padding:7px 9px;">
+
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <!--/ End Single Widget -->
+                        <div class="banners mt-4">
+                            @foreach($vertical_banners as $key=>$banner)
+                                <div class="carousel-item {{(($key==0)? 'active' : '')}}">
+                                    <img class="first-slide" src="{{$banner->photo}}" alt="First slide">
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div><!--End md-3-->
+<div class="col-md-9 col-xs-12">          
 <!-- Slider Area -->
 @if(count($horizontal_banners)>0)
 <section id="Gslider" class="carousel slide" data-ride="carousel">
-    <div class="container mt-4 position-relative">
+    <div class="mt-4 position-relative">
         <ol class="carousel-indicators">
             @foreach($horizontal_banners as $key=>$banner)
                 <li data-target="#Gslider" data-slide-to="{{$key}}" class="{{(($key==0)? 'active' : '')}}"></li>
@@ -69,68 +129,16 @@
 @endif
 
 <!--/ End Slider Area -->
+</div><!--md-9-->
+</div><!--Row-->
+</div><!--End wap-sider-->
+
 
 <!-- Start Product Area -->
 <div class="product-area section">
         <div class="container">
             <div class="row">
-                <div class="col-md-3">
-                    <div class="shop-sidebar">
-                        <!-- Single Widget -->
-                        <div class="single-widget list-category">
-                            <h3 class="title mb-0">{{ __('web.category') }}</h3>
-                            @php
-                                $categories = Helper::getAllCategory();
-                            @endphp
-                            <div id="mn-wrapper">
-                                <div class="mn-sidebar">
-                                    <div class="mn-toggle"><i class="fa fa-bars"></i></div>
-                                    <div class="mn-navblock">
-                                        <ul class="mn-vnavigation">
-                                            @foreach($categories as $key1 => $lv1)
-                                                @if($lv1->child_cat->count() > 0)
-                                                    <li class="dropdown-submenu active">
-                                                        <a tabindex="-1" href="{{route('product-cat', $lv1->slug)}}">{{$lv1->title}} <i class="fa fa-angle-right float-right mt-2"></i></a>
-                                                        <ul class="dropdown-menu">
-                                                            @foreach($lv1->child_cat as $key2 => $lv2)
-                                                                @if($lv2->child_cat->count() > 0)
-                                                                    <li class="dropdown-submenu active">
-                                                                        <a href="{{route('product-cat', $lv2->slug)}}">{{$lv2->title}} <i class="fa fa-angle-right float-right mt-2"></i></a>
-                                                                        <ul class="dropdown-menu parent">
-                                                                            @foreach($lv2->child_cat as $key3 => $lv3)
-                                                                                <li ><a href="{{route('product-cat', $lv3->slug)}}">{{$lv3->title}}</a></li>
-                                                                            @endforeach
-                                                                        </ul>
-                                                                    </li>
-                                                                @else
-                                                                    <li><a href="{{route('product-cat', $lv2->slug)}}">{{$lv2->title}}</a></li>
-                                                                @endif
-                                                            @endforeach
-                                                        </ul>
-                                                    </li>
-                                                @else
-                                                    <li><a href="{{route('product-cat', $lv1->slug)}}">{{$lv1->title}}</a></li>
-                                                @endif
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                    <!-- <div class="text-right collapse-button" style="padding:7px 9px;">
-
-                                    </div> -->
-                                </div>
-                            </div>
-                        </div>
-                        <!--/ End Single Widget -->
-                        <div class="banners mt-4">
-                            @foreach($vertical_banners as $key=>$banner)
-                                <div class="carousel-item {{(($key==0)? 'active' : '')}}">
-                                    <img class="first-slide" src="{{$banner->photo}}" alt="First slide">
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-9">
+                <div class="col-md-12">
                     
 <!-- Start New Proudct List  -->
 <section class="shop-home-list most-popular section">
@@ -471,6 +479,65 @@
 @push('styles')
 
     <style>
+        /*    THANH DEV    */
+        :root {
+            --black: #0355ff;
+            --maincolor2: #0036a5;
+            --orange: #ffffff;
+            --white: #ffffff;
+        }
+              .box-category {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .box-category .category__menu {
+                padding: 15px 0px;
+                background-color: #f5f5f5;
+                border: 1px solid #dddddd;
+                text-align: center;
+                width: 15%;
+                margin: 2px;
+                transition: 0.5s;
+            }
+
+        .box-category .category__menu:hover {
+            background-color: var(--black);
+        }
+
+            .box-category .category__menu:hover img {
+                filter: invert(1);
+            }
+
+            .box-category .category__menu:hover h4 {
+                color: var(--white);
+            }
+
+        .box-category .category__menu img {
+            width: 40px;
+            height: 40px;
+            max-width: 40px;
+            margin: auto;
+        }
+
+        .box-category .category__menu h4 {
+            font-size: 14px;
+            font-weight: bold;
+/*            margin-top: 7px;*/
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 25px;
+            -webkit-line-clamp: 1;
+            height: 22px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+        }
+        .hero {
+            padding-bottom: 50px;
+        }
+        /*    THANH DEV    */
+
         .ijKKTW {
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             font-size: 1em;
@@ -580,6 +647,24 @@
           transform:rotate(-1deg);
           opacity:0.5;
           border-radius:0.25em;
+        }
+        @media (max-width: 600px) {
+  
+         .box-category {
+             flex-wrap: wrap;
+        }
+
+        .box-category .category__menu {
+            width: 23%;
+        }
+
+        .box-category .category__menu img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .box-category .category__menu h4 {
+            font-size: 9px;
         }
     </style>
     <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5f2e5abf393162001291e431&product=inline-share-buttons' async='async'></script>
