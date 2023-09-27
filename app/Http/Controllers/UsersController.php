@@ -5,10 +5,12 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Models\Wallet;
 use App\Models\UserWallet;
 use App\Models\Shop;
+use App\Models\PointTransfer;
 
 class UsersController extends Controller
 {
@@ -20,6 +22,30 @@ class UsersController extends Controller
         $users = User::where(['is_delete' => 0])->where('id', '<>', 1)->orderBy('id','ASC')->paginate(20);
         return view('backend.users.index')->with('users', $users);
     }
+
+        public function transferPoints(Request $request)
+        {
+            // Xác định người gửi (admin)
+            $admin = Auth::user();
+
+            // Lấy thông tin người nhận và số điểm cần chuyển từ biểu mẫu
+            $receiver_id = $request->input('receiver_id');
+            $amount = $request->input('amount');
+
+            // Tạo một bản ghi giao dịch
+            PointTransfer::create([
+                'sender_id' => $admin->id,
+                'receiver_id' => $receiver_id,
+                'amount' => $amount,
+            ]);
+
+            // Cập nhật số điểm cho người nhận
+            $receiver = User::find($receiver_id);
+            $receiver->increment('points', $amount);
+
+            request()->session()->flash('success','Chuyển điểm thành công');
+            return redirect()->route('users.index');
+        }
 
     public function create()
     {

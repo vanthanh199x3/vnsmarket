@@ -13,11 +13,34 @@
       <a href="{{route('users.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="{{ __('adm.add').' '.__('adm.user') }}"><i class="fas fa-plus"></i> {{ __('adm.add').' '.__('adm.user') }}</a>
     </div>
     <div class="card-body">
+
+      <form method="post" action="{{route('admin.transfer-points.submit')}}">
+        {{csrf_field()}}
+        <div class="form-group row">
+           <div class="col-3">
+            <label for="status" class="col-form-label">Danh sách user</label>
+            <select name="receiver_id" class="form-control">
+                @foreach($users as $user)   
+                <option value="{{$user->id}}">{{$user->name}}</option>
+                 @endforeach
+            </select>
+          </div>
+          <div class="col-2">
+            <label  class="col-form-label">Số điểm chuyển</label>
+            <input  type="text" name="amount"   value="" class="form-control">
+          </div>
+    
+        </div>
+        <div class="form-group mb-3">
+           <button class="btn btn-success mt-4" type="submit">Thực hiện</button>
+        </div>
+      </form>
       <div class="table-responsive">
         <table class="table table-sm" id="user-dataTable" width="100%" cellspacing="0">
           <thead class="thead-primary">
             <tr>
               <th>{{ __('adm.user_fullname') }}</th>
+              <th>Points</th>
               <th>{{ __('adm.email') }}</th>
               <th>{{ __('adm.shop') }}</th>
               <th>{{ __('adm.created_at') }}</th>
@@ -32,6 +55,7 @@
             @foreach($users as $user)   
                 <tr>
                     <td>{{$user->name}}</td>
+                    <td>{{$user->points}}</td>
                     <td>{{$user->email}}</td>
                     <td>
                         @if ($user->role != 'admin')

@@ -197,7 +197,11 @@ Route::get('cancel', 'PayPalController@cancel')->name('payment.cancel');
 
 Route::get('payment/success', 'PayPalController@success')->name('payment.success');
 
+// Backend transfer-points
 
+Route::post('/admin/transfer-points', 'UsersController@transferPoints')->name('admin.transfer-points.submit');
+
+Route::post('/user/transfer-points', 'FrontendController@transferPoints')->name('user.transfer-points.submit');
 
 // Backend section start
     Route::get('ajax_load_price_size', 'FrontendController@ajax_load_price_size');

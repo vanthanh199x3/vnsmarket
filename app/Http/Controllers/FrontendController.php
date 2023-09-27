@@ -34,6 +34,7 @@ use App\Models\Brand;
 use App\Models\Wallet;
 use App\Models\UserWallet;
 use App\Models\NewsletterEmail;
+use App\Models\PointTransfer;
 
 class FrontendController extends Controller
 {
@@ -793,10 +794,36 @@ class FrontendController extends Controller
     }
 
      public function points() {
-        
+        // Lấy danh sách người dùng 
+        $users = User::where('id', '!=', 1)->orderBy('id','ASC')->get();
         $points = Auth()->user();
-        return view('frontend.pages.user.points', compact('points'));
+         return view('frontend.pages.user.points')->with('points', $points)->with('users', $users);
     }
+
+    public function transferPoints(Request $request)
+{
+    // Xác minh xem người dùng có đủ điểm không
+    $sender = Auth::user();
+    $receiver = User::find($request->input('receiver_id'));
+    $amount = $request->input('amount');
+
+    if ($sender->points < $amount) {
+        return redirect()->back()->with('success', 'Số điểm không đủ để chuyển.');
+    }
+
+    // Tạo một bản ghi giao dịch mới
+    PointTransfer::create([
+        'sender_id' => $sender->id,
+        'receiver_id' => $receiver->id,
+        'amount' => $amount,
+    ]);
+
+    // Cập nhật số điểm cho người gửi và người nhận
+    $sender->decrement('points', $amount);
+    $receiver->increment('points', $amount);
+    return redirect()->back()->with('success', 'Chuyển điểm thành công.');
+
+}
 
     public function token() {
         $user = Auth::user();
